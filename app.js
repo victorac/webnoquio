@@ -22,6 +22,9 @@ io.on('connection', function(socket) {
        
        socket.emit('usuarios', users);
        socket.broadcast.emit('usuarios', users);
+       var msg = '<div class="alert alert-success" role="alert">' + dataUser.nome + ' conectou' +' </div>';
+       socket.broadcast.emit('server_message', msg);
+       
     });
     
     socket.on('disconnect', function(data){
@@ -34,6 +37,9 @@ io.on('connection', function(socket) {
                 usersData: users
                 };
                 socket.broadcast.emit('deslogou', sendData );
+                var msg = '<div class="alert alert-danger" role="alert">'
+                + nomeDesloga + ' desconectou' +' </div>';
+                socket.broadcast.emit('server_message', msg);
                 break;
             }
         }

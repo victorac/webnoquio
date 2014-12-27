@@ -31,4 +31,8 @@ socket.on('deslogou', function (data) {
     drawList(data.usersData);
 });
 
+socket.on('server_message', function(msg){
+    $('#server-messages').append(msg);
+    $('#server-messages').scrollTop( $('#server-messages').height() );
+});
 
