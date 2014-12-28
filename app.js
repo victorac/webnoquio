@@ -1,48 +1,24 @@
+//Porta escolhida 1881: ano da criação de pinoquio
+
 express = require("express");
 var app = express();
 var http = require('http').Server(app);
 var io = require("socket.io")(http);
 
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/public_html/index.html'); // I would move this file to public
-});
+var wnCore = require("./my_modules/wnCore.js").wnCore();
 
-app.use(express.static(__dirname + '/public_html'));
+wnCore.startHandlePage(app, express);
 
 var users = [];
 
 
 io.on('connection', function(socket) {
-    socket.on('logou',function(data){
-       console.log(data + ' logou');
-       
-       dataUser = { nome: data, id: socket.id };
-       
-       users.push(dataUser);
-       
-       socket.emit('usuarios', users);
-       socket.broadcast.emit('usuarios', users);
-       var msg = '<div class="alert alert-success" role="alert">' + dataUser.nome + ' conectou' +' </div>';
-       socket.broadcast.emit('server_message', msg);
-       
+    socket.on('logou',function(nome){
+        wnCore.login(nome, socket.id, socket);
     });
     
     socket.on('disconnect', function(data){
-        
-        for ( i in users){
-            if ( socket.id == users[i].id ) {
-                var nomeDesloga = users[i].nome;
-                users.splice(i,1);
-                var sendData = { deslogado: nomeDesloga,
-                usersData: users
-                };
-                socket.broadcast.emit('deslogou', sendData );
-                var msg = '<div class="alert alert-danger" role="alert">'
-                + nomeDesloga + ' desconectou' +' </div>';
-                socket.broadcast.emit('server_message', msg);
-                break;
-            }
-        }
+        wnCore.logout(socket);
     });
 });
 

@@ -1,11 +1,11 @@
-var socket = io('http://localhost:1881');
-    socket.on('visits', function(visitas){
-    document.getElementById('visitas').innerHTML = visitas;
-});
+var socket;
     
 $(document).ready(function () {
     $("#welcome-div").hide();
-    $("#btnLogin").click(function () {
+    $("#wnLogin").submit(function (event) {
+        event.preventDefault();
+        socket = io('http://localhost:1881');
+        startEvents();
         var nomeJogador = $("#txtName").val();
         $("#div-Login").fadeOut("slow");
         socket.emit('logou', nomeJogador);
@@ -13,6 +13,29 @@ $(document).ready(function () {
         $("#welcome-div").show();
     });
 });
+
+
+function startEvents(){
+    socket.on('usuarios', function (users) {
+        drawList(users);
+    });
+    
+    socket.on('visits', function(visitas){
+        document.getElementById('visitas').innerHTML = visitas;
+    });
+
+    socket.on('deslogou', function (data) {
+        //alert(data.deslogado + ' deslogou');
+        drawList(data.usersData);
+    });
+    
+    socket.on('server_message', function(msg){
+        $('#server-messages').append(msg);
+        $('#server-messages').scrollTop( $('#server-messages').height() );
+    });
+
+}
+
 
 function drawList(users){
     var i = 0;
@@ -22,17 +45,4 @@ function drawList(users){
     }
 }
 
-socket.on('usuarios', function (users) {
-    drawList(users);
-});
-
-socket.on('deslogou', function (data) {
-    //alert(data.deslogado + ' deslogou');
-    drawList(data.usersData);
-});
-
-socket.on('server_message', function(msg){
-    $('#server-messages').append(msg);
-    $('#server-messages').scrollTop( $('#server-messages').height() );
-});
 
