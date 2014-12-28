@@ -1,25 +1,3 @@
-/*var wnCore = (function (){
-    var self = this;
-    
-    self.users = [];
-    
-    wnCore.prototype.addUser = function(n, sId, sckt){
-        userData = { nome: n,
-        SocketId: sId,
-        Socket: sckt
-        };
-    }
-    
-    self.test = function(){
-        console.log("Teste ok");
-    }
-    
-    function wnCore(){
-        console.log('Teste');
-    }
-    
-    return wnCore;
-})();*/
 
 wnCore = {
     test: function(){
