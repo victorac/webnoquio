@@ -9,9 +9,6 @@ var wnCore = require("./my_modules/wnCore.js").wnCore();
 
 wnCore.startHandlePage(app, express);
 
-var users = [];
-
-
 io.on('connection', function(socket) {
     socket.on('logou',function(nome){
         wnCore.login(nome, socket.id, socket);
