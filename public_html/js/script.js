@@ -16,24 +16,19 @@ $(document).ready(function () {
 
 
 function startEvents(){
-    socket.on('usuarios', function (users) {
-        drawList(users);
-    });
-    
-    socket.on('visits', function(visitas){
-        document.getElementById('visitas').innerHTML = visitas;
-    });
+    var message = "Deseja realmente sair?";
+    window.onbeforeunload = function(event) {
+        var e = e || window.event;
+        if (e) {
+            e.returnValue = message;
+        }
+        return message;
+    };
 
-    socket.on('deslogou', function (data) {
-        //alert(data.deslogado + ' deslogou');
-        drawList(data.usersData);
-    });
-    
-    socket.on('server_message', function(msg){
-        $('#server-messages').append(msg);
-        $('#server-messages').scrollTop( $('#server-messages').height() );
-    });
+}
 
+function PreventOutPage(){
+    
 }
 
 

@@ -58,6 +58,11 @@ wnCore = {
         socket.broadcast.emit('server_message', msg);
     },
     logout: function(socket){
+        if ( typeof this.usersFull[socket.id] == "undefined" ) {
+            console.log("Conexão já não existe mais");
+            return false;
+        }
+        
         var usuario = this.usersFull[socket.id].nome;
         
         this.users.splice(this.usersFull[socket.id].Index, 1);
@@ -70,6 +75,11 @@ wnCore = {
         var msg = '<div class="alert alert-danger" role="alert">'
         + usuario + ' desconectou' +' </div>';
         socket.broadcast.emit('server_message', msg);
+    },
+    showSocket: null,
+    loginShow: function(socket, data){
+        this.showSocket = socket;
+        console.log("Webnoquio show logged on!");
     }
 }
 
