@@ -1,11 +1,23 @@
 
 wnCore = {
-    test: function(){
-        console.log(this.users);
+    port: 1881, //Porta escolhida 1881: ano da criação de pinoquio
+    setPort: function(newPort){
+        this.port = newPort;
+    },
+    http: null,
+    setHttp: function (h){
+        this.http = h;
+    },
+    startServer: function(){
+        var portListen = this.port;
+        this.http.listen(portListen, function(){
+            console.log("Webnoquio started at http://localhost:" + portListen);    
+        });
     },
     usersFull: [],
     users: [],
     wnCore: function(){
+        this.port = 1881;
         return this;
     },
     addUser: function(n, sId, sckt){
