@@ -1,0 +1,9 @@
+{
+	"name": "webnoquio",
+	"public": true,
+	"version": "0.0.1",
+	"dependences": {
+		"express": "dev-master",
+		"socket.io": "dev-master"
+	}
+}
