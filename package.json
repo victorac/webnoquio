@@ -4,6 +4,8 @@
 	"version": "0.0.1",
 	"dependences": {
 		"express": "dev-master",
-		"socket.io": "dev-master"
+		"socket.io": "dev-master",
+		"mongodb": "*",
+		"monk": "*"
 	}
 }

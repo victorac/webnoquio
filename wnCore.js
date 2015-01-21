@@ -1,3 +1,6 @@
+var mongo = require("mongodb");
+var monk = require("monk");
+var db = monk("localhost:27017/wntest1");
 
 wnCore = {
     port: 1881, //Porta escolhida 1881: ano da criação de pinoquio
@@ -50,7 +53,18 @@ wnCore = {
         
         console.log(n + ' logou');
         
-        
+	var col = db.get("usercollection");
+		col.insert({
+			"username": n
+		}, function(err, doc){
+			if(err){
+				console.log("Deu err");
+			}else{
+				console.log("Nao deu err");
+			}
+		});
+	        
+
         socket.emit('usuarios', this.users);
         socket.broadcast.emit('usuarios', this.users);
         
@@ -80,6 +94,15 @@ wnCore = {
     loginShow: function(socket, data){
         this.showSocket = socket;
         console.log("Webnoquio show logged on!");
+
+	var col = db.get("usercollection");
+	col.find({},{},function(e, doc){
+			if(e){
+				console.log("Deu erro");
+			}else{
+				console.log(doc);
+			}
+	});
     }
 }
 
