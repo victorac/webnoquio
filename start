@@ -1,7 +1,0 @@
-#/usr/bin/bash
-
-cd public_html
-rm script.js
-tsc script.ts
-cd ..
-node app.js
