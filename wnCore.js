@@ -1,6 +1,35 @@
-var mongo = require("mongodb");
-var monk = require("monk");
-var db = monk("localhost:27017/wntest1");
+var mongoose = require('mongoose');
+//var db = monk("localhost:27017/wntest1");
+var models  = require('./models/schema');
+var User = mongoose.model('userSchema');
+
+var lucas = new User({idUser:1, username: 'Lucas'});
+
+var kittySchema = mongoose.Schema({
+    name: String
+})
+kittySchema.methods.speak = function(){
+	var greeting = this.name 
+	? "Meow name is " + this.name 
+	: "I don't have a name";
+	console.log(greeting); 
+}
+var Kitten = mongoose.model('Kitten', kittySchema);
+var silence = new Kitten({name:'Silence' });
+console.log(silence.name);
+silence.speak();
+mongoose.connect("mongodb://localhost/test");
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(callback){
+	silence.save(function (err, silence){
+		if (err) return console.error(err);
+		silence.speak();
+	});
+	Kitten.find({name: /^Silence/}, callback);
+	console.log('find');
+	
+});
 
 wnCore = {
     port: 1881, //Porta escolhida 1881: ano da criação de pinoquio
@@ -49,22 +78,24 @@ wnCore = {
         app.use(express.static(__dirname + '/public_html'));
     },
     login: function(n, sId, socket){
-        this.addUser(n, sId, socket);
         
-        console.log(n + ' logou');
-        
-	var col = db.get("usercollection");
-		col.insert({
-			"username": n
-		}, function(err, doc){
-			if(err){
-				console.log("Deu err");
-			}else{
-				console.log("Nao deu err");
+        User.findOne({username:n}, function(err, user){
+			if(err) return console.error(err);
+			if (user) console.log('found');
+			else{ 
+				var newUser = new User({idUser:sId, username:n});
+				newUser.save(function(err, user){
+					if(err) return console.error(err);
+					user.print();
+				});
 			}
+				
 		});
-	        
-
+        
+        this.addUser(n, sId, socket);
+   
+        console.log(n + ' logou');
+   
         socket.emit('usuarios', this.users);
         socket.broadcast.emit('usuarios', this.users);
         
@@ -95,14 +126,6 @@ wnCore = {
         this.showSocket = socket;
         console.log("Webnoquio show logged on!");
 
-	var col = db.get("usercollection");
-	col.find({},{},function(e, doc){
-			if(e){
-				console.log("Deu erro");
-			}else{
-				console.log(doc);
-			}
-	});
     }
 }
 

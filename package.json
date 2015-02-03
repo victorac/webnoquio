@@ -6,6 +6,6 @@
 		"express": "dev-master",
 		"socket.io": "dev-master",
 		"mongodb": "*",
-		"monk": "*"
+		"mongoose": "*"
 	}
 }
